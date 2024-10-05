@@ -1,0 +1,29 @@
+veesion: '3'
+
+services:
+  postgres:
+    image: postgres:13
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=S3cret
+      - POSTGRES_USER=jenkins_admin
+      - POSTGRES_db=jenkins_db
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+    - "5000:5000"
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://jenkins_admin:S3cret@postgres:5432/jenkins_db
+
+volumes:
+  postgres_data:
+
+  
